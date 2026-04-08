@@ -11,29 +11,43 @@
     "splash": {
       "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#4F83CC" 
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.gabrielfernandes.botochat",
+      "infoPlist": {
+        "NSBluetoothAlwaysUsageDescription": "O BotoChat utiliza Bluetooth para encontrar e enviar mensagens para pessoas próximas sem internet.",
+        "NSBluetoothPeripheralUsageDescription": "O BotoChat utiliza Bluetooth para estabelecer conexões peer-to-peer.",
+        "NSLocalNetworkUsageDescription": "Necessário para comunicação via Wi-Fi Direct/P2P."
+      }
     },
     "android": {
+      "package": "com.gabrielfernandes.botochat",
+      "permissions": [
+        "BLUETOOTH",
+        "BLUETOOTH_ADMIN",
+        "BLUETOOTH_SCAN",
+        "BLUETOOTH_CONNECT",
+        "BLUETOOTH_ADVERTISE",
+        "ACCESS_FINE_LOCATION"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#4F83CC" 
       },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "edgeToEdgeEnabled": true
     },
     "plugins": [
-      "expo-router"
-    ],
-    "experiments": {
-      "typedRoutes": true
-    }
+      "expo-router",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "kotlinVersion": "1.9.0"
+          }
+        }
+      ]
+    ]
   }
 }
