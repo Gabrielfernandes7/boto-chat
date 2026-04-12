@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
+import { useColorScheme } from '@/components/useColorScheme';
 import { Message } from '@/domain/entities';
-import { tokens } from '@/ui/theme';
+import { getAppThemeColors, tokens } from '@/ui/theme';
 
 type Props = {
   title: string;
@@ -12,6 +13,8 @@ type Props = {
 
 export function ChatScreen({ title, messages, onSend }: Props) {
   const [draft, setDraft] = useState('');
+  const colorScheme = useColorScheme();
+  const palette = getAppThemeColors(colorScheme);
 
   async function handleSend() {
     if (!draft.trim()) {
@@ -24,27 +27,54 @@ export function ChatScreen({ title, messages, onSend }: Props) {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+    <View style={[styles.container, { backgroundColor: palette.surface }]}> 
+      <View style={[styles.header, { borderBottomColor: palette.border }]}> 
+        <Text style={[styles.title, { color: palette.text }]}>{title}</Text>
+        <Text style={styles.subtitle}>BLE · ~4m</Text>
+      </View>
 
       <FlatList
         data={messages}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContent}
-        renderItem={({ item }) => (
-          <View style={[styles.bubble, item.direction === 'outbound' ? styles.outbound : styles.inbound]}>
-            <Text style={[styles.bubbleText, item.direction === 'outbound' && styles.outboundText]}>{item.body}</Text>
-          </View>
-        )}
+        contentContainerStyle={[styles.listContent, { backgroundColor: palette.surfaceAlt }]}
+        renderItem={({ item }) => {
+          const outbound = item.direction === 'outbound';
+
+          return (
+            <View style={[styles.bubbleWrap, outbound ? styles.right : styles.left]}>
+              <View
+                style={[
+                  styles.bubble,
+                  outbound
+                    ? { backgroundColor: palette.bubbleOutbound }
+                    : {
+                        backgroundColor: palette.bubbleInbound,
+                        borderColor: palette.bubbleInboundBorder,
+                      },
+                ]}>
+                <Text style={[styles.bubbleText, { color: outbound ? palette.bubbleOutboundText : palette.text }]}>
+                  {item.body}
+                </Text>
+              </View>
+            </View>
+          );
+        }}
       />
 
-      <View style={styles.inputRow}>
+      <View style={[styles.inputRow, { borderTopColor: palette.border, backgroundColor: palette.surface }]}> 
         <TextInput
           value={draft}
           onChangeText={setDraft}
-          placeholder="Digite sua mensagem"
-          placeholderTextColor={tokens.colors.textoPrimario}
-          style={styles.input}
+          placeholder="Mensagem..."
+          placeholderTextColor={palette.textMuted}
+          style={[
+            styles.input,
+            {
+              borderColor: palette.border,
+              backgroundColor: palette.bubbleInbound,
+              color: palette.text,
+            },
+          ]}
         />
         <Pressable style={styles.sendButton} onPress={handleSend}>
           <Text style={styles.sendButtonText}>Enviar</Text>
@@ -57,63 +87,72 @@ export function ChatScreen({ title, messages, onSend }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: tokens.colors.offWhite,
-    padding: tokens.spacing.md,
+  },
+  header: {
+    paddingHorizontal: tokens.spacing.lg,
+    paddingVertical: tokens.spacing.md,
+    borderBottomWidth: 1,
   },
   title: {
-    fontSize: tokens.typography.heading,
-    fontWeight: '700',
-    color: tokens.colors.azulProfundo,
-    marginBottom: tokens.spacing.md,
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  subtitle: {
+    fontSize: 9,
+    color: tokens.colors.blue,
+    marginTop: 2,
   },
   listContent: {
     gap: tokens.spacing.sm,
-    paddingBottom: tokens.spacing.md,
+    paddingVertical: tokens.spacing.md,
+    paddingHorizontal: tokens.spacing.md,
+    flexGrow: 1,
+  },
+  bubbleWrap: {
+    width: '100%',
+  },
+  left: {
+    alignItems: 'flex-start',
+  },
+  right: {
+    alignItems: 'flex-end',
   },
   bubble: {
     maxWidth: '80%',
-    padding: tokens.spacing.md,
-    borderRadius: tokens.radius.md,
-  },
-  inbound: {
-    backgroundColor: tokens.colors.white,
+    paddingHorizontal: tokens.spacing.md,
+    paddingVertical: tokens.spacing.sm,
+    borderRadius: 13,
     borderWidth: 1,
-    borderColor: tokens.colors.cinzaClaro,
-    alignSelf: 'flex-start',
-  },
-  outbound: {
-    backgroundColor: tokens.colors.azulRio,
-    alignSelf: 'flex-end',
   },
   bubbleText: {
-    color: tokens.colors.textoPrimario,
-  },
-  outboundText: {
-    color: tokens.colors.white,
+    fontSize: 11,
+    lineHeight: 16,
   },
   inputRow: {
     flexDirection: 'row',
     gap: tokens.spacing.sm,
-    marginTop: tokens.spacing.sm,
+    paddingHorizontal: tokens.spacing.md,
+    paddingTop: tokens.spacing.sm,
+    paddingBottom: tokens.spacing.md,
+    borderTopWidth: 1,
   },
   input: {
     flex: 1,
     borderWidth: 1,
-    borderColor: tokens.colors.cinzaClaro,
-    borderRadius: tokens.radius.md,
+    borderRadius: 16,
     paddingHorizontal: tokens.spacing.md,
-    paddingVertical: tokens.spacing.sm,
-    backgroundColor: tokens.colors.white,
-    color: tokens.colors.textoPrimario,
+    paddingVertical: 8,
+    fontSize: 11,
   },
   sendButton: {
-    backgroundColor: tokens.colors.azulRio,
-    borderRadius: tokens.radius.md,
+    backgroundColor: tokens.colors.pink,
+    borderRadius: 99,
     paddingHorizontal: tokens.spacing.md,
     justifyContent: 'center',
   },
   sendButtonText: {
     color: tokens.colors.white,
-    fontWeight: '700',
+    fontWeight: '600',
+    fontSize: 11,
   },
 });
