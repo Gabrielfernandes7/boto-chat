@@ -1,29 +1,11 @@
 import { useLocalSearchParams } from 'expo-router';
 
-import { Message } from '@/domain/entities';
 import { ChatScreen } from '@/ui/screens/ChatScreen';
-
-const messages: Message[] = [
-  {
-    id: 'm1',
-    chatId: 'c1',
-    senderPeerId: '1',
-    body: 'Olá! Sinal estável por aqui.',
-    sentAt: new Date().toISOString(),
-    direction: 'inbound',
-  },
-  {
-    id: 'm2',
-    chatId: 'c1',
-    senderPeerId: 'local',
-    body: 'Perfeito, seguimos conectados.',
-    sentAt: new Date().toISOString(),
-    direction: 'outbound',
-  },
-];
+import { useChat } from '@/ui/hooks/useChat';
 
 export default function ChatRoute() {
-  const { peerId } = useLocalSearchParams<{ peerId: string }>();
+  const { peerId = '' } = useLocalSearchParams<{ peerId: string }>();
+  const { title, messages, send } = useChat(peerId);
 
-  return <ChatScreen title={`Chat com Peer ${peerId}`} messages={messages} />;
+  return <ChatScreen title={title} messages={messages} onSend={send} />;
 }

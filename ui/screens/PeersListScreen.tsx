@@ -5,13 +5,15 @@ import { tokens } from '@/ui/theme';
 
 type Props = {
   peers: Peer[];
-  onOpenChat: (peer: Peer) => void;
+  isLoading?: boolean;
+  onOpenChat: (peer: Peer) => void | Promise<void>;
 };
 
-export function PeersListScreen({ peers, onOpenChat }: Props) {
+export function PeersListScreen({ peers, isLoading = false, onOpenChat }: Props) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Pares próximos</Text>
+      {isLoading ? <Text style={styles.loading}>Buscando peers...</Text> : null}
       <FlatList
         data={peers}
         keyExtractor={(item) => item.id}
@@ -38,6 +40,10 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: tokens.colors.azulProfundo,
     marginBottom: tokens.spacing.md,
+  },
+  loading: {
+    color: tokens.colors.textoPrimario,
+    marginBottom: tokens.spacing.sm,
   },
   listContent: {
     gap: tokens.spacing.sm,
