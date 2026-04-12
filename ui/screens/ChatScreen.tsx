@@ -1,4 +1,5 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { Message } from '@/domain/entities';
 import { tokens } from '@/ui/theme';
@@ -6,9 +7,22 @@ import { tokens } from '@/ui/theme';
 type Props = {
   title: string;
   messages: Message[];
+  onSend: (text: string) => Promise<void>;
 };
 
-export function ChatScreen({ title, messages }: Props) {
+export function ChatScreen({ title, messages, onSend }: Props) {
+  const [draft, setDraft] = useState('');
+
+  async function handleSend() {
+    if (!draft.trim()) {
+      return;
+    }
+
+    const current = draft;
+    setDraft('');
+    await onSend(current);
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
@@ -23,6 +37,19 @@ export function ChatScreen({ title, messages }: Props) {
           </View>
         )}
       />
+
+      <View style={styles.inputRow}>
+        <TextInput
+          value={draft}
+          onChangeText={setDraft}
+          placeholder="Digite sua mensagem"
+          placeholderTextColor={tokens.colors.textoPrimario}
+          style={styles.input}
+        />
+        <Pressable style={styles.sendButton} onPress={handleSend}>
+          <Text style={styles.sendButtonText}>Enviar</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -41,6 +68,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     gap: tokens.spacing.sm,
+    paddingBottom: tokens.spacing.md,
   },
   bubble: {
     maxWidth: '80%',
@@ -62,5 +90,30 @@ const styles = StyleSheet.create({
   },
   outboundText: {
     color: tokens.colors.white,
+  },
+  inputRow: {
+    flexDirection: 'row',
+    gap: tokens.spacing.sm,
+    marginTop: tokens.spacing.sm,
+  },
+  input: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: tokens.colors.cinzaClaro,
+    borderRadius: tokens.radius.md,
+    paddingHorizontal: tokens.spacing.md,
+    paddingVertical: tokens.spacing.sm,
+    backgroundColor: tokens.colors.white,
+    color: tokens.colors.textoPrimario,
+  },
+  sendButton: {
+    backgroundColor: tokens.colors.azulRio,
+    borderRadius: tokens.radius.md,
+    paddingHorizontal: tokens.spacing.md,
+    justifyContent: 'center',
+  },
+  sendButtonText: {
+    color: tokens.colors.white,
+    fontWeight: '700',
   },
 });
