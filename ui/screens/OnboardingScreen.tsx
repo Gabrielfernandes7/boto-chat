@@ -1,20 +1,27 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { tokens } from '@/ui/theme';
+import { useColorScheme } from '@/components/useColorScheme';
+import { getAppThemeColors, tokens } from '@/ui/theme';
 
 type Props = {
   onContinue: () => void;
 };
 
 export function OnboardingScreen({ onContinue }: Props) {
+  const colorScheme = useColorScheme();
+  const palette = getAppThemeColors(colorScheme);
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: palette.surface }]}> 
       <Image source={require('@/assets/images/icon.png')} style={styles.logo} />
-      <Text style={styles.title}>BotoChat</Text>
-      <Text style={styles.subtitle}>Conexões que fluem. Como o rio, como o som.</Text>
+      <Text style={styles.title}>Boto Chat</Text>
+      <Text style={[styles.subtitle, { color: palette.textMuted }]}>Conexões que fluem.</Text>
+      <Text style={[styles.description, { color: palette.textMuted }]}> 
+        Converse com quem está perto sem precisar de internet. Como o boto que se comunica por ecoalização.
+      </Text>
 
       <Pressable style={styles.button} onPress={onContinue}>
-        <Text style={styles.buttonText}>Entrar</Text>
+        <Text style={styles.buttonText}>Começar</Text>
       </Pressable>
     </View>
   );
@@ -23,37 +30,43 @@ export function OnboardingScreen({ onContinue }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: tokens.colors.offWhite,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: tokens.spacing.lg,
+    padding: tokens.spacing.xl,
     gap: tokens.spacing.md,
   },
   logo: {
-    width: 140,
-    height: 140,
-    borderRadius: tokens.radius.lg,
+    width: 100,
+    height: 100,
+    borderRadius: 24,
   },
   title: {
     fontSize: tokens.typography.title,
-    fontWeight: '800',
-    color: tokens.colors.rosaBoto,
+    fontWeight: '600',
+    color: tokens.colors.pink,
+    letterSpacing: -0.5,
   },
   subtitle: {
-    fontSize: tokens.typography.body,
-    color: tokens.colors.textoPrimario,
+    fontSize: tokens.typography.caption,
+    fontStyle: 'italic',
     textAlign: 'center',
+  },
+  description: {
+    fontSize: tokens.typography.caption,
+    lineHeight: 18,
+    textAlign: 'center',
+    maxWidth: 280,
   },
   button: {
     marginTop: tokens.spacing.lg,
-    backgroundColor: tokens.colors.azulRio,
-    borderRadius: tokens.radius.md,
-    paddingHorizontal: tokens.spacing.xl,
+    backgroundColor: tokens.colors.pink,
+    borderRadius: 20,
+    paddingHorizontal: tokens.spacing.xxl,
     paddingVertical: tokens.spacing.md,
   },
   buttonText: {
     color: tokens.colors.white,
-    fontSize: tokens.typography.body,
-    fontWeight: '700',
+    fontSize: 12,
+    fontWeight: '600',
   },
 });
