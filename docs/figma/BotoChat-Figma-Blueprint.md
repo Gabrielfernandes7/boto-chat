@@ -1,150 +1,235 @@
-# BotoChat — Blueprint de Figma (Semana 1)
+# BotoChat — Blueprint de Figma (MVP para React Native)
 
-Este documento funciona como **arquivo-base de Figma** para o time montar e manter o design system e as 3 telas iniciais do app:
-
-- Onboarding
-- Lista de Pares
-- Chat
+Este guia descreve exatamente como estruturar o arquivo no Figma **sem dependência de geração automática**, deixando tudo pronto para implementação em React Native.
 
 ---
 
-## 1) Estrutura recomendada do arquivo Figma
+## 1) Estrutura do arquivo no Figma
 
-**Página 1 — Cover**
-- Capa: `BotoChat · Mobile App`
-- Versão: `v0.1 (Semana 1)`
+Crie as páginas nesta ordem:
 
-**Página 2 — Foundations**
-- Cores (Design Tokens)
-- Tipografia
-- Espaçamentos
-- Raios de borda
-- Elevação/Sombra
-
-**Página 3 — Components**
-- Botões
-- Cards de pares
-- Balões de chat
-- Top Bar
-- Item de lista
-
-**Página 4 — Screens (Flows)**
-- `01_Onboarding`
-- `02_Peers`
-- `03_Chat`
-
-**Página 5 — Prototypes**
-- Fluxo navegável:
-  - Onboarding → Peers → Chat
+1. `01 - Foundations`
+2. `02 - Components`
+3. `03 - Screens (MVP)`
+4. `04 - Flows`
 
 ---
 
-## 2) Design Tokens (alinhados ao app)
+## 2) Foundations (base visual)
 
-### Cores
-- `brand/rosa-boto`: `#FF6FA3`
-- `brand/azul-rio`: `#2563EB`
-- `brand/verde-floresta`: `#00B894`
-- `neutral/off-white`: `#FFF7E6`
-- `neutral/cinza-claro`: `#F0F4F8`
-- `neutral/azul-profundo`: `#0B1E6D`
-- `text/primary`: `#102A43`
-- `base/white`: `#FFFFFF`
+### 🎨 Cores (identidade BotoChat)
 
-### Tipografia
-- `title`: 28 / 700+
-- `heading`: 22 / 700
-- `body`: 16 / 400-600
-- `caption`: 13 / 400
+- `primary`: `#FF6FB5` (rosa boto)
+- `secondary`: `#6C5CE7` (roxo tecnológico)
+- `background/dark`: `#0F1226`
+- `surface`: `#1A1F3A`
+- `text/primary`: `#FFFFFF`
+- `text/secondary`: `#A0A4C0`
+- `semantic/success`: `#2ECC71`
+- `semantic/danger`: `#FF5A5F`
 
-### Espaçamento
-- `xs`: 4
-- `sm`: 8
-- `md`: 16
-- `lg`: 24
-- `xl`: 32
+Gradiente principal:
 
-### Radius
-- `sm`: 8
-- `md`: 16
-- `lg`: 24
+- `gradient/main`: `#FF6FB5 → #6C5CE7`
 
----
+### 🔤 Tipografia
 
-## 3) Layout base dos frames
+- Títulos: **Poppins** (ou **Inter** como fallback)
+- Corpo: **Inter**
 
-Use iPhone 16/15 base frame: **393 x 852**.
+Escala tipográfica:
 
-### 3.1 Onboarding
-- Fundo: `neutral/off-white`
-- Logo central (140 x 140), radius 24
-- Título: "BotoChat"
-- Subtítulo: "Conexões que fluem. Como o rio, como o som."
-- CTA primário: "Entrar"
-  - Cor: `brand/azul-rio`
-  - Texto: branco
+- `h1`: `28`
+- `h2`: `22`
+- `body`: `16`
+- `caption`: `12`
 
-### 3.2 Lista de Pares
-- Fundo: `neutral/off-white`
-- Título: "Pares próximos"
-- Cards (lista vertical)
-  - Fundo branco
-  - Borda `neutral/cinza-claro`
-  - Radius 16
-  - Nome do peer + status
+### 🔘 Estilo visual
 
-### 3.3 Chat
-- Fundo: `neutral/off-white`
-- Título/topo: "Chat com Peer"
-- Balões:
-  - Entrada: branco, borda cinza, texto primário
-  - Saída: azul-rio, texto branco
+- Border radius padrão: `16px` (orgânico)
+- Elementos levemente arredondados
+- Sombras suaves (efeito flutuante)
+- Elemento-chave de identidade: **ondas / ripple / sonar**
 
 ---
 
-## 4) Componentes para transformar em variants
+## 3) Components (reutilizáveis)
 
-### Button / Primary
-- Estado: Default, Pressed, Disabled
+Crie componentes antes das telas para garantir consistência:
 
-### PeerCard
-- Estado: Online, Offline, Unknown
+### `Button/Primary`
 
-### MessageBubble
-- Tipo: Inbound, Outbound
+- Fundo com gradiente principal
+- Texto branco
+- Radius `16`
+- Variants:
+  - `state=normal`
+  - `state=loading`
+  - `state=disabled`
 
-### TopBar
-- Com e sem botão de voltar
+### `Card/Device`
 
----
+- Avatar
+- Nome do dispositivo
+- Intensidade de sinal (ícone/barras/ondas)
+- Ação: botão **Conectar**
 
-## 5) Prototipação (interações)
+### `Bubble/Chat`
 
-- `Onboarding/Entrar` → Navigate to `Peers`
-- `Peers/PeerCard` → Navigate to `Chat`
+- Variante enviada (`type=sent`): rosa
+- Variante recebida (`type=received`): cinza escuro
+- Bordas orgânicas
 
-Animação sugerida: **Smart Animate, 250ms, Ease Out**.
+### `Header/Default`
 
----
-
-## 6) Entrega para desenvolvimento
-
-### Naming convention
-- Frames: `Screen/Onboarding`, `Screen/Peers`, `Screen/Chat`
-- Components: `Button/Primary`, `Card/Peer`, `Bubble/Inbound`, `Bubble/Outbound`
-- Styles: `Color/...`, `Text/...`, `Effect/...`
-
-### Export
-- Ícone app: PNG 1024x1024
-- Assets ilustrativos: SVG quando possível
+- Botão voltar
+- Título
+- Status de conexão
 
 ---
 
-## 7) Checklist de pronto
+## 4) Screens do MVP
 
-- [ ] Tokens criados como Styles/Variables
-- [ ] Componentes com Auto Layout
-- [ ] Telas com constraints responsivas
-- [ ] Fluxo navegável publicado
-- [ ] Link de Figma compartilhado com devs
+Nomeie os frames exatamente como abaixo para facilitar implementação:
 
+- `SplashScreen`
+- `OnboardingScreen`
+- `PermissionScreen`
+- `DiscoveryScreen`
+- `PairingScreen`
+- `ChatScreen`
+
+### 4.1 `SplashScreen`
+
+Objetivo: impacto visual inicial.
+
+Elementos:
+
+- Logo do boto central
+- Fundo gradiente (animável)
+- Texto: **BotoChat**
+
+### 4.2 `OnboardingScreen` (1–2 telas)
+
+**Tela 1**
+
+- Ilustração de ondas
+- Texto:
+  - “Converse sem internet”
+  - “Dispositivos próximos, conexão direta”
+
+**Tela 2**
+
+- Explicação simples sobre:
+  - Bluetooth
+  - Privacidade
+- CTA: **Começar**
+
+### 4.3 `PermissionScreen`
+
+- Ícone de Bluetooth
+- Texto principal:
+  - “Precisamos de acesso ao Bluetooth”
+- CTA: **Permitir**
+
+### 4.4 `DiscoveryScreen` (núcleo do produto)
+
+Elementos:
+
+- Header: “Dispositivos próximos”
+
+Estado 1 — buscando:
+
+- Animação de ondas (radar)
+- Texto: “Procurando...”
+
+Estado 2 — lista:
+
+- Cards com:
+  - Nome (ex.: “Gabriel iPhone”)
+  - Intensidade do sinal (ondas)
+  - Botão **Conectar**
+
+### 4.5 `PairingScreen`
+
+Tela intermediária de conexão.
+
+Elementos:
+
+- Dois avatares
+- Ondas conectando os avatares
+- Status:
+  - “Conectando...”
+  - “Conectado”
+
+### 4.6 `ChatScreen`
+
+Estrutura:
+
+- Header:
+  - Nome do dispositivo
+  - Status (Conectado / Fora de alcance)
+- Corpo: lista de mensagens
+- Input:
+  - Campo de texto
+  - Botão enviar
+
+Extras importantes:
+
+- Indicador de erro: “Mensagem não enviada”
+- Timestamp leve por mensagem
+
+### 4.7 Estado desconectado (dentro do fluxo de chat)
+
+- Banner: “Fora de alcance”
+- Ação: “Reconectar”
+
+---
+
+## 5) Fluxos UX (04 - Flows)
+
+Fluxo principal:
+
+1. Splash
+2. Onboarding
+3. Permissões
+4. Descoberta
+5. Pareamento
+6. Chat
+
+Fluxo alternativo:
+
+- Chat → Desconexão → Voltar para Descoberta
+
+---
+
+## 6) Microinterações (diferencial)
+
+Desenhar no Figma:
+
+- Ondas ao buscar dispositivos
+- Pulsação no botão conectar
+- Animação de “eco” ao encontrar alguém
+- Feedback de proximidade (mais ondas = mais perto)
+
+---
+
+## 7) Handoff para React Native
+
+Para acelerar a implementação:
+
+- Use nomes de frame exatamente como definidos na seção 4.
+- Padronize componentes com variants e propriedades semânticas (`state`, `type`, `status`).
+- Mantenha tokens (cores/tipografia/radius) centralizados em `01 - Foundations`.
+
+---
+
+## 8) Próximo passo recomendado
+
+Melhor decisão técnica agora: começar por **DiscoveryScreen**, que é o núcleo do produto.
+
+Opções de continuidade:
+
+1. Transformar em wireframes de baixo nível (direto para código)
+2. Desenhar layout pixel-perfect detalhado da `DiscoveryScreen`
+3. Entregar código React Native baseado nas telas
