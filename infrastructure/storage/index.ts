@@ -1,15 +1,6 @@
-export interface StorageAdapter {
-  get<T>(key: string): Promise<T | null>;
-  set<T>(key: string, value: T): Promise<void>;
-}
+import { messageRepository, peerRepository, initDatabase } from './sqlite';
 
-const memory = new Map<string, unknown>();
+// Initialize DB on first access
+initDatabase();
 
-export const storage: StorageAdapter = {
-  async get<T>(key: string) {
-    return (memory.get(key) as T | undefined) ?? null;
-  },
-  async set<T>(key: string, value: T) {
-    memory.set(key, value);
-  },
-};
+export { messageRepository, peerRepository };
